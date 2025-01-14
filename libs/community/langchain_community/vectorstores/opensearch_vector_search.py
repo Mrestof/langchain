@@ -576,10 +576,15 @@ class OpenSearchVectorSearch(VectorStore):
     def create_index(
         self,
         dimension: int,
-        index_name: Optional[str] = uuid.uuid4().hex,
+        index_name: Optional[str] = None,
         **kwargs: Any,
     ) -> Optional[str]:
         """Create a new Index with given arguments"""
+        if index_name is None:
+            if self.index_name is None:
+                raise ValueError("index_name must be provided.")
+            index_name = self.index_name
+
         is_appx_search = kwargs.get("is_appx_search", True)
         vector_field = kwargs.get("vector_field", "vector_field")
         kwargs.get("text_field", "text")
