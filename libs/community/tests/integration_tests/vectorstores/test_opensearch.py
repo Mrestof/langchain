@@ -478,3 +478,13 @@ def test_appx_search_with_faiss_efficient_filter() -> None:
     )
     assert output[0].page_content == "bar"
     assert output[0].id is not None
+
+
+def test_create_index_none() -> None:
+    index_name = "some-index-name"
+    docsearch = OpenSearchVectorSearch(
+        DEFAULT_OPENSEARCH_URL, index_name, FakeEmbeddings()
+    )
+    docsearch.create_index(10, index_name=None)  # << should not fail
+    assert docsearch.index_exists(index_name)
+    docsearch.delete_index(index_name)
